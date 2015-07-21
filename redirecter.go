@@ -22,7 +22,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
         // log.Println(c.Names, c.Ports)
         for _, name := range c.Names {
                 if (strings.Contains(name, searchName)) {
-                        io.WriteString(w, fmt.Sprintf("<a href=\"http://sandbox.tether.to:%v\">%v</a><br>", c.Ports[0].PublicPort, name))
+                        io.WriteString(w, fmt.Sprintf("<a href=\"http://sandbox.bitfinex.to:%v\">%v</a><br>", c.Ports[0].PublicPort, name))
                 }
         }
     }
