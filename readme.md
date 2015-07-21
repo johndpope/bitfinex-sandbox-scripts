@@ -2,19 +2,13 @@
 
 In this documentation all examples uses `master` branch. Replace it with any branch you need.
 
-Control panel: http://sandbox.tether.to:9000
-
 ### Getting started
 Clone automation project to user home directory
 ``` bash
 > cd ~
-> git clone git@github.com:WebLogicNow/automation.git
+> git clone https://github.com/WebLogicNow/bitfinex-sandboxing.git
 ```
-Then you should copy your `id_rsa` file to `~/automation/docker` dir.
-Notice, you need to copy id_rsa that have access to tether github repo!
-``` bash
-> cp ~/.ssh/id_rsa ~/automation/docker
-```
+
 #### Configs.
 Also, you need to copy all rails *.yml configs to `~/automation/docker/config` directory.
 
@@ -28,7 +22,6 @@ need to search for free port manually.
 # Starting container with branch master at port 25000
 # cee0acba895419bc7b37fe163b71f5a6c3680be5fe26a11dbb176bf6707fbff0
 ```
-Once deploy is finished(around 5 minutes) you will receive message in Slack #automation channel with link to container.
 
 `NOTICE: Wait 30sec after slack message received, rails will start development server.`
 
@@ -73,7 +66,7 @@ Once you are logged you can start exploring:
 In case when you need to see full process of building container you can start container from commandline:
 
 ``` bash
-> sudo docker run -p 25555:3000 -i -t --rm -v /home/username/automation/docker:/docker andrey/tether master 25555
+> sudo docker run -p 25555:3000 -i -t --rm -v /home/username/automation/docker:/docker andrey/bitfinex master 25555
 ```
 Keep in mind to change 25555 twice and change full path to docker automation dir.
 
@@ -84,12 +77,10 @@ and then build it:
 
 ``` bash
 > cd ~/automation/docker
-> sudo docker build -t andrey/tether .
+> sudo docker build -t andrey/bitfinex .
 ```
 
 # FAQ
 How to attach to running container: sudo docker attach master   
 How to exit from attached shell and not brake flow: Ctrl+p + Ctrl+q   
 
-### Enjoy)  
-Maintainer: andrey.b@tether.to
