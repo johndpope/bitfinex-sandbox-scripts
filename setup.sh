@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 U=$(whoami)
 if [ "$U" != "docker" ]; then
@@ -25,11 +24,12 @@ cp /docker/config/initializers/mailtrap.rb "$workDir/app/config/initializers"
 
 # Install packages
 cd "$workDir/app"
+echo "gem: --no-rdoc --no-ri" > "$workDir/.gemrc"
 source /home/docker/.rvm/scripts/rvm
 rvm use 2.0.0
 gem update --system
 gem install bundler
-bundle install
+bundle install -j2
 
 # Start services
 sudo service mysql start
@@ -41,10 +41,6 @@ rake db:setup
 rake db:migrate
 rake db:seed
 
-# Send message to slack #automation channel
-#slackmsg="$branch%3A+http%3A%2F%2Fsandbox.tether.to%3A$port"
-#url="https://slack.com/api/chat.postMessage?token=xoxp-3357153413-3438545863-3802630863-95a1c2&channel=%23automation&text=$slackmsg&pretty=1"
-#curl -X POST $url
-
 #rails s
+export BITFINEX_BASE_URL="http://sandbox.bitfinex.com:$port"
 ruby server.rb
