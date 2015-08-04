@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y openssh-server openssh-client git curl vim build-essential
 
 # Projects dependencies
-RUN apt-get install -y redis-server mysql-client mysql-server libmysqlclient-dev nodejs-legacy npm
+RUN apt-get install -y redis-server mysql-client mysql-server libmysqlclient-dev nodejs-legacy npm ruby-dev imagemagick libmagickwand-dev libmagickcore-dev 
 
 # Create user
 RUN apt-get -y install sudo
@@ -32,10 +32,13 @@ RUN \curl -L https://get.rvm.io | bash -s stable
 RUN /bin/bash -l -c "sudo rvm requirements"
 RUN /bin/bash -l -c "source ~/.rvm/scripts/rvm"
 RUN /bin/bash -l -c "rvm install 2.0.0"
+RUN /bin/bash -l -c "rvm use 2.0.0"
+RUN /bin/bash -l -c "gem install rbczmq"
 
 RUN /bin/bash -l -c "mkdir /home/docker/.ssh"
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/docker/.ssh/config
 RUN echo "Host bitbucket.org\n\tStrictHostKeyChecking no\n" >> /home/docker/.ssh/config
 
 EXPOSE 3000
+EXPOSE 3306
 ENTRYPOINT ["/docker/setup.sh"]

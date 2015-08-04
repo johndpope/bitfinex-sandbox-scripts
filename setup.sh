@@ -21,6 +21,7 @@ git clone -b $branch $gitRepo app/
 sudo cp -r /docker/config/*.yml "$workDir/app/config"
 cp /docker/server.rb "$workDir/app"
 cp /docker/config/initializers/mailtrap.rb "$workDir/app/config/initializers"
+sed -i -e "s/sandbox.bitfinex.com/sandbox.bitfinex.com:$port/g" $workDir/app/config/*.yml
 
 # Install packages
 cd "$workDir/app"
@@ -43,4 +44,6 @@ rake db:seed
 
 #rails s
 export BITFINEX_BASE_URL="http://sandbox.bitfinex.com:$port"
-ruby server.rb
+./launchtesting.sh development .
+# ruby server.rb # server is run at launchtesting.sh
+tail -f log/*
