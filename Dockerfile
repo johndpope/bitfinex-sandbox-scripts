@@ -16,6 +16,9 @@ RUN apt-get install -y openssh-server openssh-client git curl vim build-essentia
 # Projects dependencies
 RUN apt-get install -y redis-server mysql-client mysql-server libmysqlclient-dev nodejs-legacy npm ruby-dev imagemagick libmagickwand-dev libmagickcore-dev 
 
+# Update mysql config
+RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+
 # Create user
 RUN apt-get -y install sudo
 RUN useradd docker && echo "docker:docker" | chpasswd && adduser docker sudo
@@ -33,12 +36,11 @@ RUN /bin/bash -l -c "sudo rvm requirements"
 RUN /bin/bash -l -c "source ~/.rvm/scripts/rvm"
 RUN /bin/bash -l -c "rvm install 2.0.0"
 RUN /bin/bash -l -c "rvm use 2.0.0"
-RUN /bin/bash -l -c "gem install rbczmq"
+RUN /bin/bash -l -c "gem install rbczmq eventmachine gpgme nokogiri"
 
 RUN /bin/bash -l -c "mkdir /home/docker/.ssh"
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/docker/.ssh/config
 RUN echo "Host bitbucket.org\n\tStrictHostKeyChecking no\n" >> /home/docker/.ssh/config
 
-EXPOSE 3000
-EXPOSE 3306
+EXPOSE 3000 3306
 ENTRYPOINT ["/docker/setup.sh"]

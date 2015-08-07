@@ -5,12 +5,15 @@ if [ "$U" != "docker" ]; then
 	echo "Existing. You should run this script inside docker container!"
 	exit 2
 fi
+if [ -z $GITHUB_TOKEN ]; then
+	echo "Please create a token at https://github.com/settings/tokens and set up a GITHUB_TOKEN variable!"
+	exit 2
+fi
 
 branch=$1
 port=$2
 workDir="/home/docker"
-token="d8f16a5bedcc0e09a4a41c8be2848c0b209e047b"
-gitRepo="https://d8f16a5bedcc0e09a4a41c8be2848c0b209e047b@github.com/tetherto/bitfinex.git"
+gitRepo="https://$GITHUB_TOKEN@github.com/tetherto/bitfinex.git"
 
 cd $workDir
 
@@ -44,6 +47,6 @@ rake db:seed
 
 #rails s
 export BITFINEX_BASE_URL="http://sandbox.bitfinex.com:$port"
-./launchtesting.sh development .
-# ruby server.rb # server is run at launchtesting.sh
-tail -f log/*
+./launchsandbox.sh development .
+ruby server.rb 
+# tail -f log/*
