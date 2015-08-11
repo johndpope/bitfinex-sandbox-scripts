@@ -34,6 +34,8 @@ rvm use 2.0.0
 gem update --system
 gem install bundler
 bundle install -j2
+npm install
+sudo npm install forever -g
 
 # Start services
 sudo service mysql start
@@ -43,10 +45,11 @@ sudo service redis-server start
 cd "$workDir/app"
 rake db:setup
 rake db:migrate
-rake db:seed
+rake db:seed ENABLE_TRADING=1
 
-#rails s
+echo "GRANT ALL PRIVILEGES ON bfxdev.* TO 'remote'@'%' identified by 'AP5FZnadm029n'" | mysql --host=localhost --user=root --password="" bfxdev
 export BITFINEX_BASE_URL="http://sandbox.bitfinex.com:$port"
+export SIGN_KEY_SEC="$2a$10$OodvD3gpNpRQkezjbMLcDe"
 ./launchsandbox.sh development .
-ruby server.rb 
+ruby server.rb
 # tail -f log/*

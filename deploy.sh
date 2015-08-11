@@ -14,6 +14,7 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
  
 BASE=25000
+BASE_SQL=33000
 INCREMENT=1
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
@@ -28,10 +29,19 @@ while [[ -n "$isfree" ]]; do
   isfree=$(netstat -tapln | grep $port)
 done
 
+port_sql=$BASE_SQL
+isfree=$(netstat -tapln | grep $port_sql)
+
+# Find free port starting from $BASE_SQL
+while [[ -n "$isfree" ]]; do
+  port_sql=$[port_sql+INCREMENT]
+  isfree=$(netstat -tapln | grep $port_sql)
+done
+
 echo "Starting container with branch $branch at port $port"
 docker stop $branch > /dev/null 2>&1
 docker rm $branch > /dev/null 2>&1
 
 # Run container
-docker run -p $port:3000 -e GITHUB_TOKEN -i -t --name $branch -v $SCRIPTPATH:/docker andrey/bitfinex $branch $port
+docker run -p $port:3000 -p $port_sql:3306 -e GITHUB_TOKEN -i -t --name $branch -v $SCRIPTPATH:/docker andrey/bitfinex $branch $port
 #docker run -p $port:3000 -i -t --rm -v $SCRIPTPATH:/docker andrey/bitfinex $branch $port 
