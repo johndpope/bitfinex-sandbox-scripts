@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script is executed inside docker container.
+
 U=$(whoami)
 if [ "$U" != "docker" ]; then
 	echo "Existing. You should run this script inside docker container!"
