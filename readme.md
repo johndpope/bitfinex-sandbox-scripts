@@ -4,7 +4,8 @@ In this documentation all examples uses `master` branch. Replace it with any bra
 Make sure that BFX-92-sandbox branch is merged to your working branch before deployment.
 
 ### Getting started
-Clone automation project to user home directory
+Clone automation project to user home directory on sandbox server:
+
 ``` bash
 > cd ~
 > git clone git@github.com:tetherto/bitfinex-sandbox-scripts.git
